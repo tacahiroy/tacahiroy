@@ -219,9 +219,6 @@ call minpac#add('prabirshrestha/asyncomplete-buffer.vim')
           \ }))
   augroup END
 
-call minpac#add('thomasfaingnaert/vim-lsp-snippets')
-call minpac#add('thomasfaingnaert/vim-lsp-ultisnips')
-
 " call minpac#add('fatih/vim-go')
   let g:go_def_mode = 'gopls'
   let g:go_info_mode = 'gopls'
@@ -340,8 +337,8 @@ endif
 "}}}
 
 "{{{ ALE
-" call minpac#add('dense-analysis/ale')
-"   let g:ale_enabled = 1
+call minpac#add('dense-analysis/ale')
+  let g:ale_enabled = 0
   let g:ale_lint_on_text_changed = 'never'
   let g:ale_lint_on_insert_leave = 0
   let g:ale_set_loclist = 0
@@ -349,17 +346,18 @@ endif
   let g:ale_set_balloons = has('balloon_eval_term')
   let g:ale_python_auto_pipenv = 1
   let g:ale_python_pylint_options = '--rcfile=.pylintrc'
+  let g:ale_python_pylint_use_global = 0
   let g:ale_python_pyls_use_global = 1
   let g:ale_disable_lsp = 1
 
-  " disabling ALE for specific files
-  let g:ale_pattern_options = {'\.php$': {'ale_enabled': 0}}
+
+  " ALE configurations for specific files
+  let g:ale_pattern_options = {'\.php$': {'ale_enabled': 0}, '.py$': {'ale_enabled': 1}, '.sh$': {'ale_enabled': 1}}
 
   let g:ale_linters = {'html': ['eslint'],
         \ 'python': ['pylint', 'pyls'],
         \ 'yaml': ['yamllint'],
-        \ 'go': ['gopls', 'gobuild', 'govet'],
-        \ 'bash': ['shellcheck']
+        \ 'bash': ['language_server', 'shellcheck']
         \ }
   let g:ale_fixers = { 'python': ['black', 'isort', 'autoimport'],
         \ 'go': ['goimports'],
@@ -394,8 +392,8 @@ endif
 
 call minpac#add('michaeljsmith/vim-indent-object')
 
-call minpac#add('mechatroner/rainbow_csv')
-call minpac#add('jremmen/vim-ripgrep')
+" call minpac#add('jremmen/vim-ripgrep')
+call minpac#add('mhinz/vim-grepper')
 
 call minpac#add('tacahiroy/vim-colors-isotake')
 
@@ -420,6 +418,9 @@ if has('python3')
             \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
             \ }))
     augroup END
+
+  call minpac#add('thomasfaingnaert/vim-lsp-snippets')
+  call minpac#add('thomasfaingnaert/vim-lsp-ultisnips')
 endif
 
 if filereadable(expand('~/.vimrc.plugins'))
@@ -697,13 +698,10 @@ nnoremap k gk
 
 " quickfix related mappings
 nnoremap <silent> qo :<C-u>silent call <SID>toggle_qf_list()<Cr>
-nnoremap <silent> q[ :cprevious<Cr>zz
-nnoremap <silent> q] :cnext<Cr>zz
+nnoremap <silent> qn :cnext<Cr>zz
+nnoremap <silent> qh :cprevious<Cr>zz
 nnoremap <silent> qc :cc<Cr>zz
 
-" buffer navigations
-nnoremap <silent> qn :bnext<Cr>
-nnoremap <silent> qp :bprevious<Cr>
 " tab navigations
 nnoremap <silent> gn :tabnext<Cr>
 nnoremap <silent> gh :tabprevious<Cr>
@@ -889,7 +887,7 @@ augroup Tacahiroy
   autocmd FileType make setlocal iskeyword+=-
   " autocmd BufRead,BufNewFile *.groovy,*.jenkins,Jenkinsfile* setlocal filetype=groovy
   autocmd BufRead,BufNewFile *.jenkins setfiletype groovy.Jenkinsfile
-  autocmd FileType groovy.Jenkinsfile setlocal autoindent smartindent
+  autocmd FileType Jenkinsfile,*.Jenkinsfile setlocal autoindent smartindent
 
   augroup PersistentUndo
     autocmd!
@@ -904,10 +902,10 @@ augroup Tacahiroy
   " autocmd BufRead,BufNewFile *.md,*.mkd,*.markdown set filetype=markdown
 
   autocmd FileType markdown inoremap <buffer> <Leader>tt <Esc>:<C-u>call <SID>insert_today_for_md_changelog()<Cr>:startinsert<Cr>
-  autocmd FileType markdown set autoindent
-  autocmd FileType markdown setlocal tabstop=4 shiftwidth=4 conceallevel=0
-  let g:markdown_fenced_languages = ['python', 'bash=sh']
-  let g:markdown_syntax_conceal = 0
+  autocmd FileType markdown set autoindent smartindent
+  autocmd FileType markdown set tabstop=4 shiftwidth=4 softtabstop=4 expandtab conceallevel=0
+  " let g:markdown_fenced_languages = ['python', 'bash=sh']
+  " let g:markdown_syntax_conceal = 0
 
   autocmd FileType gitcommit setlocal spell
 
