@@ -11,6 +11,8 @@ alias llh='ls -lh'
 alias sl='ls'
 alias gi='git'
 alias vi='vim'
+alias vr='vim -RM'
+alias vess='vim -RM -'
 alias where='command -v'
 alias df='df -h'
 alias gi='git'
@@ -22,8 +24,7 @@ alias tfm=terraform
 alias lines='grep -c ""'
 alias b='cd -'
 alias cda='cd -P .'
-alias wipython='workon ipython && ipython'
-alias wansible='workon ansible'
+alias wo=workon
 
 if type _z >/dev/null 2>&1; then
     alias jc='_z -c'
