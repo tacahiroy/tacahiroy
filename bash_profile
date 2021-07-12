@@ -56,9 +56,10 @@ fi
 
 fd=$(command -v fd 2>/dev/null)
 if [ -n "${fd}" ]; then
-    FIND="${fd}"
-    FINDO=
-    export FIND FINDO
+    FILTER_FIND="${fd}"
+    FINDO='. -t f'
+    FINDO_DIR='. -t d'
+    export FILTER_FIND FINDO FINDO_DIR
 fi
 
 export SHELLCHECK_OPTS="-e SC2016 -e SC1090"

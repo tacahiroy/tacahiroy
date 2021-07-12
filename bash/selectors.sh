@@ -3,7 +3,8 @@
 F=${FILTER_CMD:-$HOME/bin/fzy}
 FO=${FILTER_OPTIONS:-}
 FIND=${FILTER_FIND:-find}
-FINDO=${FINDO:--maxdepth 5 ! -path '*/.git/*' -type f}
+FINDO=${FINDO:-. -maxdepth 5 ! -path '*/.git/*'}
+FINDO_DIR=${FINDO_DIR:-. -type d}
 
 SELECTOR_HIST_PROMPT_OPT="--prompt=HIST> "
 SELECTOR_DIR_PROMPT_OPT="--prompt=CD> "
@@ -31,7 +32,7 @@ select_history() {
 }
 
 select_dir() {
-    READLINE_LINE="cd $(find . -mindepth 1 -maxdepth 5 -type d ! -path '*/.git*' 2>&1 | \
+    READLINE_LINE="cd $(${FIND} ${FINDO_DIR} 2>&1 | \
         ${F} "${FO}" "${SELECTOR_DIR_PROMPT_OPT}")"
     READLINE_POINT=${#READLINE_LINE}
 }
@@ -45,7 +46,7 @@ select_dir_hist() {
 select_file_hist() {
     local cmd=${READLINE_LINE:-${EDITOR:-vim}}
 
-    READLINE_LINE="${cmd} $(${FIND} . "${FINDO}" | \
+    READLINE_LINE="${cmd} $(${FIND} "${FINDO}" | \
         ${F} "${FO}" "${SELECTOR_FILE_PROMPT_OPT}")"
     READLINE_POINT=${#READLINE_LINE}
 }
@@ -177,7 +178,7 @@ select_git_branch_all() {
 
 bind -x '"\C-gh"':"\"select_history\""
 bind -x '"\C-t"':"\"select_ctrlpvim_mru\""
-bind -x '"\C-gd\,"':"\"select_dir\""
+bind -x '"\C-gd"':"\"select_dir\""
 bind -x '"\C-gD"':"\"select_dir_hist\""
 bind -x '"\C-gf"':"\"select_file\""
 bind -x '"\C-gF"':"\"select_file_hist\""
@@ -185,4 +186,4 @@ bind -x '"\C-g\C-p"':"\"select_git_repo\""
 bind -x '"\C-g\C-b"':"\"select_git_branch\""
 bind -x '"\C-g\C-a"':"\"select_git_branch_all\""
 bind -x '"\C-g\C-t"':"\"select_git_tag\""
-# bind -x '"\C-q"':"\"select-ssh\""
+# bind -x '"\C-gs"':"\"select-ssh\""
