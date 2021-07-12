@@ -54,6 +54,7 @@
 	fet  = fetch --tags
 	merge-log = !sh -c 'git log --stat $1^..$1' -
 	mt = mergetool
+	pushf = push --force-with-lease
 
 [interactive]
 	diffFilter = delta --color-only
